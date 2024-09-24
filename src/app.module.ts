@@ -10,7 +10,6 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { DatabaseModule } from './modules/database/database.module'
 import { CACHE_DEFAULT_TIME } from './utils/constants'
 
-@Global()
 @Module({
    imports: [
       ConfigModule.forRoot(),
