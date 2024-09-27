@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
 import { AuthorAdapter } from '../adapters/author.adapter'
 import { ArticleAdapter } from '../adapters/article.adapter'
 import { CommentAdapter } from '../adapters/comment.adapter'
 import { Article } from './../../types/article'
-import { LogErrorMessage, message, CACHE_DEFAULT_TIME } from './../../utils'
+import { message, CACHE_DEFAULT_TIME } from './../../utils'
 
 @Injectable()
 export class ArticleService {
@@ -20,7 +20,7 @@ export class ArticleService {
          // Check if the author exists
          const author = await this.authorAdapter.findEntry({ email })
          if (!author) {
-            return { successful: true, message: message.Author_not_found }
+            throw new NotFoundException(message.Author_not_found)
          }
 
          // Insert new article into the database
@@ -30,8 +30,10 @@ export class ArticleService {
 
          return { successful: true, message: message.Article_Created_Successfully, articleId: result }
       } catch (error: unknown) {
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 
@@ -40,13 +42,15 @@ export class ArticleService {
          const result = await this.articleAdapter.findEntries()
 
          if (!result) {
-            return { successful: true, message: message.No_Articles_Found }
+            throw new NotFoundException(message.No_Articles_Found)
          }
 
          return { successful: true, message: message.Articles_Fetched_Successfully, result }
       } catch (error: unknown) {
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 
@@ -61,15 +65,17 @@ export class ArticleService {
          const result = await this.articleAdapter.findEntry({ id })
 
          if (!result) {
-            return { successful: true, message: message.Article_not_found }
+            throw new NotFoundException(message.Article_not_found)
          }
 
          await this.cacheManager.set(`${id}`, result, CACHE_DEFAULT_TIME)
 
          return { successful: true, message: message.Article_Fetched_Successfully, result }
       } catch (error: unknown) {
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 
@@ -78,7 +84,7 @@ export class ArticleService {
          const article = await this.articleAdapter.findEntry({ id })
 
          if (!article) {
-            return { successful: true, message: message.Article_not_found }
+            throw new NotFoundException(message.Article_not_found)
          }
 
          // Delete article and its comments
@@ -89,8 +95,10 @@ export class ArticleService {
 
          return { successful: true, message: message.Article_Deleted_Successfully }
       } catch (error: unknown) {
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 }

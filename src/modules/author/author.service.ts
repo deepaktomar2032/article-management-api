@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
 import { AuthorAdapter } from './../adapters/author.adapter'
 import { Author } from './../../types'
-import { message, SALT_VALUE, LogErrorMessage } from './../../utils'
+import { message, SALT_VALUE } from './../../utils'
 
 @Injectable()
 export class AuthorService {
@@ -27,8 +27,10 @@ export class AuthorService {
          return { successful: true, message: message.Author_Created_Successfully, authorId: result }
       } catch (error: unknown) {
          console.error('Error inserting data:', error)
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 
@@ -37,7 +39,7 @@ export class AuthorService {
          const result = await this.authorAdapter.findEntries()
 
          if (!result) {
-            return { successful: true, message: message.No_Authors_Found }
+            throw new NotFoundException(message.No_Authors_Found)
          }
 
          const response = result.map((author) => {
@@ -47,8 +49,10 @@ export class AuthorService {
 
          return { successful: true, message: message.Authors_Fetched_Successfully, response }
       } catch (error: unknown) {
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 
@@ -56,14 +60,16 @@ export class AuthorService {
       try {
          const result = await this.authorAdapter.findEntry({ id })
          if (!result) {
-            return { successful: true, message: message.Author_not_found }
+            throw new NotFoundException(message.Author_not_found)
          }
          const { password, ...response } = result
 
          return { successful: true, message: message.Author_Fetched_Successfully, response }
       } catch (error: unknown) {
-         console.log(LogErrorMessage(error))
-         return { successful: false, message: message.Something_went_wrong }
+         if (error instanceof InternalServerErrorException) {
+            throw new InternalServerErrorException(message.Something_went_wrong)
+         }
+         throw error
       }
    }
 }
