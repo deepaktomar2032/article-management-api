@@ -4,7 +4,7 @@ import { TableName, AuthorEntry } from './../../types'
 
 @Injectable()
 export class AuthorAdapter extends DatabaseService<AuthorEntry> {
-   constructor() {
-      super(TableName.AUTHOR)
-   }
+  constructor() {
+    super(TableName.AUTHOR)
+  }
 }

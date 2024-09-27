@@ -1,3 +1,3 @@
 export interface Stringifiable {
-   toString(): string
+  toString(): string
 }

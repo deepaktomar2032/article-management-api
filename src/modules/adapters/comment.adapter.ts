@@ -4,7 +4,7 @@ import { TableName, CommentEntry } from './../../types'
 
 @Injectable()
 export class CommentAdapter extends DatabaseService<CommentEntry> {
-   constructor() {
-      super(TableName.COMMENT)
-   }
+  constructor() {
+    super(TableName.COMMENT)
+  }
 }

@@ -11,16 +11,16 @@ import { DatabaseModule } from './modules/database/database.module'
 import { CACHE_DEFAULT_TIME } from './utils/constants'
 
 @Module({
-   imports: [
-      ConfigModule.forRoot(),
-      CacheModule.register({ ttl: CACHE_DEFAULT_TIME, isGlobal: true }),
-      DatabaseModule,
-      AuthenticationModule,
-      AuthorModule,
-      ArticleModule,
-      CommentModule,
-   ],
-   controllers: [AppController],
-   providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    CacheModule.register({ ttl: CACHE_DEFAULT_TIME, isGlobal: true }),
+    DatabaseModule,
+    AuthenticationModule,
+    AuthorModule,
+    ArticleModule,
+    CommentModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

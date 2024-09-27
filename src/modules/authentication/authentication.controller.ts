@@ -5,11 +5,11 @@ import { AuthenticationService } from './authentication.service'
 @ApiTags('Login')
 @Controller('/api')
 export class AuthenticationController {
-   @Inject() private readonly authenticationService: AuthenticationService
+  @Inject() private readonly authenticationService: AuthenticationService
 
-   @HttpCode(HttpStatus.OK)
-   @Post('/auth')
-   signIn(@Body() signInData: Record<string, string>) {
-      return this.authenticationService.signIn(signInData.email, signInData.password)
-   }
+  @HttpCode(HttpStatus.OK)
+  @Post('/auth')
+  signIn(@Body() signInData: Record<string, string>) {
+    return this.authenticationService.signIn(signInData.email, signInData.password)
+  }
 }

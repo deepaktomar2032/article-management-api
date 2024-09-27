@@ -4,7 +4,7 @@ import { TableName, ArticleEntry } from './../../types'
 
 @Injectable()
 export class ArticleAdapter extends DatabaseService<ArticleEntry> {
-   constructor() {
-      super(TableName.ARTICLE)
-   }
+  constructor() {
+    super(TableName.ARTICLE)
+  }
 }

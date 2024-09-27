@@ -6,16 +6,16 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { SECRET_KEY, EXPIRATION_TIME } from './../../utils/constants'
 
 @Module({
-   imports: [
-      AdapterModule,
-      JwtModule.register({
-         global: true,
-         secret: SECRET_KEY,
-         signOptions: { expiresIn: EXPIRATION_TIME },
-      }),
-   ],
-   providers: [AuthenticationService],
-   controllers: [AuthenticationController],
-   exports: [AuthenticationService],
+  imports: [
+    AdapterModule,
+    JwtModule.register({
+      global: true,
+      secret: SECRET_KEY,
+      signOptions: { expiresIn: EXPIRATION_TIME },
+    }),
+  ],
+  providers: [AuthenticationService],
+  controllers: [AuthenticationController],
+  exports: [AuthenticationService],
 })
 export class AuthenticationModule {}

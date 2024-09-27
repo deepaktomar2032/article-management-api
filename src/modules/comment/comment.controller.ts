@@ -6,23 +6,23 @@ import { CreateCommentBody } from './../../types'
 @ApiTags('Comment')
 @Controller('/api')
 export class CommentController {
-   @Inject() private readonly commentService: CommentService
+  @Inject() private readonly commentService: CommentService
 
-   // Create new comment
-   @Post('/comment')
-   async createComment(@Body() body: CreateCommentBody) {
-      return this.commentService.createComment(body)
-   }
+  // Create new comment
+  @Post('/comment')
+  async createComment(@Body() body: CreateCommentBody) {
+    return this.commentService.createComment(body)
+  }
 
-   // Get all comments
-   @Get('/comments')
-   async getComments() {
-      return this.commentService.getComments()
-   }
+  // Get all comments
+  @Get('/comments')
+  async getComments() {
+    return this.commentService.getComments()
+  }
 
-   // Get comment by id
-   @Get(`/comment/:id`)
-   async getCommentById(@Param('id', ParseIntPipe) id: number) {
-      return this.commentService.getCommentById(id)
-   }
+  // Get comment by id
+  @Get(`/comment/:id`)
+  async getCommentById(@Param('id', ParseIntPipe) id: number) {
+    return this.commentService.getCommentById(id)
+  }
 }

@@ -1,46 +1,46 @@
 version: '3.9'
 
 services:
-   articles-management-api-dev:
-      container_name: articles-management-api-dev
-      build:
-         context: .
-      volumes:
-         - ./:/usr/src/app
-         - /usr/src/app/node_modules
-      ports:
-         - 4000:4000
-      command: sh -c "until nc -z mysql 3306; do echo 'Waiting for MySQL...'; sleep 2; done; npm run db-migrate && npm run start:dev"
-      environment:
-         NODE_ENV: development
-         PORT: 4000
+  articles-management-api-dev:
+    container_name: articles-management-api-dev
+    build:
+      context: .
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 4000:4000
+    command: sh -c "until nc -z mysql 3306; do echo 'Waiting for MySQL...'; sleep 2; done; npm run db-migrate && npm run start:dev"
+    environment:
+      NODE_ENV: development
+      PORT: 4000
 
-         DB_HOST: mysql
-         DB_USER: test
-         DB_PASSWORD: password
-         DB_NAME: test_db
-         DB_PORT: 3306
-         
-         DATABASE_URL: mysql://root:password@db:3306/mydatabase
+      DB_HOST: mysql
+      DB_USER: test
+      DB_PASSWORD: password
+      DB_NAME: test_db
+      DB_PORT: 3306
 
-         SECRET_KEY: secret
-         EXPIRATION_TIME: 25m
+      DATABASE_URL: mysql://root:password@db:3306/mydatabase
 
-      depends_on:
-         - mysql
+      SECRET_KEY: secret
+      EXPIRATION_TIME: 25m
 
-   mysql:
-      image: mysql
-      restart: always
-      volumes:
-         - mysql:/var/lib/mysql
-      environment:
-         MYSQL_ROOT_PASSWORD: password
-         MYSQL_USER: test
-         MYSQL_PASSWORD: password
-         MYSQL_DATABASE: test_db
-      ports:
-         - 3306:3306
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: test
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: test_db
+    ports:
+      - 3306:3306
 
 volumes:
-   mysql:
+  mysql:

@@ -4,12 +4,12 @@ import { DatabaseService } from './database.service'
 import config from './../../../knexfile'
 
 @Module({
-   imports: [
-      KnexModule.forRoot({
-         config: config.development,
-      }),
-   ],
-   providers: [DatabaseService],
-   exports: [DatabaseService],
+  imports: [
+    KnexModule.forRoot({
+      config: config.development,
+    }),
+  ],
+  providers: [DatabaseService],
+  exports: [DatabaseService],
 })
 export class DatabaseModule {}

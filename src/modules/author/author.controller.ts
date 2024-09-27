@@ -7,25 +7,25 @@ import { CreateAuthorBody } from './../../types'
 @ApiTags('Author')
 @Controller('/api')
 export class AuthorController {
-   @Inject() private readonly authorService: AuthorService
+  @Inject() private readonly authorService: AuthorService
 
-   // Create new author
-   @Post('/author')
-   async createAuthor(@Body() body: CreateAuthorBody) {
-      return this.authorService.createAuthor(body)
-   }
+  // Create new author
+  @Post('/author')
+  async createAuthor(@Body() body: CreateAuthorBody) {
+    return this.authorService.createAuthor(body)
+  }
 
-   // Get all authors
-   @UseGuards(AuthenticationGuard)
-   @Get('/authors')
-   async getAuthors() {
-      return this.authorService.getAuthors()
-   }
+  // Get all authors
+  @UseGuards(AuthenticationGuard)
+  @Get('/authors')
+  async getAuthors() {
+    return this.authorService.getAuthors()
+  }
 
-   // Get author by id
-   @UseGuards(AuthenticationGuard)
-   @Get('/author/:id')
-   async getAuthorById(@Param('id', ParseIntPipe) id: number) {
-      return this.authorService.getAuthorById(id)
-   }
+  // Get author by id
+  @UseGuards(AuthenticationGuard)
+  @Get('/author/:id')
+  async getAuthorById(@Param('id', ParseIntPipe) id: number) {
+    return this.authorService.getAuthorById(id)
+  }
 }

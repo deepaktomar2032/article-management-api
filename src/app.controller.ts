@@ -4,11 +4,11 @@ import { AppService } from './app.service'
 
 @Controller(`/api`)
 export class AppController {
-   @Inject() private readonly appService: AppService
+  @Inject() private readonly appService: AppService
 
-   @ApiTags('Healt Check')
-   @Get(`/health`)
-   healthCheck() {
-      return this.appService.healthCheck()
-   }
+  @ApiTags('Healt Check')
+  @Get(`/health`)
+  healthCheck() {
+    return this.appService.healthCheck()
+  }
 }
