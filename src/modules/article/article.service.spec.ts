@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { ArticleService } from './article.service'
@@ -106,14 +107,15 @@ describe('ArticleService', () => {
         .spyOn(mockArticleAdapter, 'insertEntry')
         .mockResolvedValue(article)
 
-      const result = await articleService.createArticle({ email, title, content })
+      await expect(articleService.createArticle({ email, title, content })).rejects.toThrow(
+        NotFoundException,
+      )
 
       expect(mockAuthorAdapter.findEntry).toHaveBeenCalledWith({ email })
       expect(mockArticleAdapter.insertEntry).not.toHaveBeenCalled()
 
       expect(findEntrySpy).toHaveBeenCalledTimes(1)
       expect(insertEntrySpy).toHaveBeenCalledTimes(0)
-      expect(result).toEqual({ successful: true, message: message.Author_not_found })
     })
   })
 
@@ -162,11 +164,10 @@ describe('ArticleService', () => {
       const getSpy = jest.spyOn(mockCacheManager, 'get').mockResolvedValue(undefined)
       const findEntrySpy = jest.spyOn(mockArticleAdapter, 'findEntry').mockResolvedValue(undefined)
 
-      const result = await articleService.getArticleById(1)
+      await expect(articleService.getArticleById(1)).rejects.toThrow(NotFoundException)
 
       expect(getSpy).toHaveBeenCalledTimes(1)
 
-      expect(result).toEqual({ successful: true, message: message.Article_not_found })
       expect(findEntrySpy).toHaveBeenCalledTimes(1)
     })
 
