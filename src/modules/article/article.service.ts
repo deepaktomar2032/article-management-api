@@ -1,9 +1,9 @@
 import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
-import { AuthorAdapter } from '../adapters/author.adapter'
-import { ArticleAdapter } from '../adapters/article.adapter'
-import { Article } from './../../types/article'
-import { message, CACHE_DEFAULT_TIME } from './../../utils'
+import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
+import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
+import { Article } from 'src/types'
+import { message, CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Injectable()
 export class ArticleService {

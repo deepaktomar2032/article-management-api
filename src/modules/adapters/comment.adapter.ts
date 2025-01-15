@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { DatabaseService } from './../database/database.service'
-import { TableName, CommentEntry } from './../../types'
+import { DatabaseService } from 'src/modules/database/database.service'
+import { TableName, CommentEntry } from 'src/types'
 
 @Injectable()
 export class CommentAdapter extends DatabaseService<CommentEntry> {

@@ -1,8 +1,8 @@
 import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
-import { AuthorAdapter } from './../adapters/author.adapter'
-import { Author } from './../../types'
-import { message, SALT_VALUE } from './../../utils'
+import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
+import { Author } from 'src/types'
+import { message, SALT_VALUE } from 'src/utils'
 
 @Injectable()
 export class AuthorService {

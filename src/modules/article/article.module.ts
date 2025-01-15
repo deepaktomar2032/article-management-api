@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { AdapterModule } from '../adapters/adapter.module'
+import { AdapterModule } from 'src/modules/adapters/adapter.module'
 import { ArticleController } from './article.controller'
 import { ArticleService } from './article.service'
 

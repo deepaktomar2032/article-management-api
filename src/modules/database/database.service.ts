@@ -5,7 +5,7 @@ import {
   convertKeysToUnderscore,
   extractJsonQuery,
   JSONQuery,
-} from './../../utils'
+} from 'src/utils'
 
 export class DatabaseService<T> {
   @InjectConnection() private readonly knex: Knex

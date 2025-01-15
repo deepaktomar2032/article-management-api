@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common'
 import { Request } from 'express'
 import { JwtService } from '@nestjs/jwt'
-import { SECRET_KEY } from './../../utils'
+import { SECRET_KEY } from 'src/utils'
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {

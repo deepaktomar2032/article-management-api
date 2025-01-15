@@ -1,5 +1,5 @@
 import type { Knex } from 'knex'
-import type { Stringifiable } from './../types'
+import type { Stringifiable } from 'src/types'
 
 export const underscoreToCamelCase = (str: string): string =>
   str.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase())

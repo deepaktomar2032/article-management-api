@@ -1,14 +1,14 @@
 import { Module, Global } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { CacheModule } from '@nestjs/cache-manager'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
-import { ArticleModule } from './modules/article/article.module'
-import { AuthorModule } from './modules/author/author.module'
-import { CommentModule } from './modules/comment/comment.module'
-import { AuthenticationModule } from './modules/authentication/authentication.module'
-import { DatabaseModule } from './modules/database/database.module'
-import { CACHE_DEFAULT_TIME } from './utils/constants'
+import { AppController } from 'src/app.controller'
+import { AppService } from 'src/app.service'
+import { ArticleModule } from 'src/modules/article/article.module'
+import { AuthorModule } from 'src/modules/author/author.module'
+import { CommentModule } from 'src/modules/comment/comment.module'
+import { AuthenticationModule } from 'src/modules/authentication/authentication.module'
+import { DatabaseModule } from 'src/modules/database/database.module'
+import { CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Module({
   imports: [

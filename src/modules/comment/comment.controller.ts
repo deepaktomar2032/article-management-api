@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CommentService } from './comment.service'
-import { CreateCommentBody } from './../../types'
+import { CreateCommentBody } from 'src/types'
 
 @ApiTags('Comment')
 @Controller('/api')
