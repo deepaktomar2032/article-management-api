@@ -17,7 +17,7 @@
     "docker:reset": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -q) && docker volume rm $(docker volume ls -q)",
     "docker:dev": "npm run docker:stop && docker compose -f docker-compose.dev.yml up --build",
     "docker:dev-reset": "npm run docker:reset && docker compose -f docker-compose.dev.yml up --build",
-    "docker:prod": "npm run docker:stop && docker-compose up --build",
+    "docker:prod": "npm run docker:stop && docker compose -f docker-compose.prod.yml up --build",
     "add-migration": "knex migrate:make -x ts $1",
     "db-migrate": "knex migrate:latest"
   },
