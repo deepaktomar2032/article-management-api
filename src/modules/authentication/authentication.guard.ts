@@ -25,7 +25,11 @@ export class AuthenticationGuard implements CanActivate {
     } catch {
       throw new UnauthorizedException()
     }
-    request['email'] = this.jwtService.decode(token).email
+
+    request.user = {
+      email: this.jwtService.decode(token).email,
+      authorId: this.jwtService.decode(token).sub,
+    }
     return true
   }
 

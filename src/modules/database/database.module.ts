@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common'
 import { KnexModule } from 'nestjs-knex'
 import { DatabaseService } from './database.service'
-import config from './../../../knexfile'
+import getClientConfig from './../../../knexfile'
 
 @Module({
   imports: [
     KnexModule.forRoot({
-      config: config.development,
+      config: getClientConfig,
     }),
   ],
   providers: [DatabaseService],

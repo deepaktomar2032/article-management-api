@@ -28,9 +28,9 @@ export class CommentService {
       }
 
       const commentData = { authorId, articleId, content, createdAt: new Date() }
-      const result = await this.commentAdapter.insertEntry(commentData)
+      const commentId = await this.commentAdapter.insertEntry(commentData)
 
-      return { commentId: result.id }
+      return { commentId }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)

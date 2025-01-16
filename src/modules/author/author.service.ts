@@ -28,9 +28,9 @@ export class AuthorService {
       const hashedPassword = await bcrypt.hash(password, SALT_VALUE)
       const authorData = { name, email, password: hashedPassword, isAdmin: false }
 
-      const result = await this.authorAdapter.insertEntry(authorData)
+      const authorId = await this.authorAdapter.insertEntry(authorData)
 
-      return { authorId: result.id }
+      return { authorId }
     } catch (error: unknown) {
       console.error('Error inserting data:', error)
       if (error instanceof InternalServerErrorException) {
