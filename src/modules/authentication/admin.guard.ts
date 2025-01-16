@@ -32,7 +32,10 @@ export class AdminGuard implements CanActivate {
       throw new ForbiddenException()
     }
 
-    request['email'] = this.jwtService.decode(token).email
+    request.user = {
+      email: this.jwtService.decode(token).email,
+      authorId: this.jwtService.decode(token).sub,
+    }
     return true
   }
 
