@@ -1,8 +1,6 @@
 import { IsString, IsNotEmpty } from 'class-validator'
 import { ArticleEntry } from './database/ArticleEntry'
 
-export type Strings = Record<string, string>
-
 export type Article = {
   authorId: number
   email: string

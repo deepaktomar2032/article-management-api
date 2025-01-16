@@ -8,6 +8,8 @@ import {
   ParseIntPipe,
   Param,
   Inject,
+  HttpCode,
+  HttpStatus,
   UseGuards,
 } from '@nestjs/common'
 import { Request } from 'express'
@@ -45,6 +47,7 @@ export class ArticleController {
   }
 
   // Mark/Unmark article as favorite
+  @HttpCode(HttpStatus.OK)
   @Post(`/article/:id/favorite`)
   async markArticleAsFavorite(
     @Req() request: Request,

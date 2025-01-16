@@ -86,19 +86,20 @@ export class ArticleService {
     try {
       const { authorId } = request['user']
 
-      console.log('authorId', authorId)
-      console.log('id', id)
+      const article = await this.articleAdapter.findEntry({ id })
+
+      if (!article) {
+        throw new NotFoundException(message.Article_not_found)
+      }
 
       const existingFavorite = await this.favoriteAdapter.findEntry({ authorId, articleId: id })
-
-      console.log('existingFavorite', existingFavorite)
 
       if (existingFavorite) {
         await this.favoriteAdapter.deleteEntries({ authorId, articleId: id })
         return { message: message.favorite_Removed }
       }
 
-      const article = await this.favoriteAdapter.insertEntry({ authorId, articleId: id })
+      await this.favoriteAdapter.insertEntry({ authorId, articleId: id })
 
       return { message: message.Article_Marked_As_Favorite }
     } catch (error: unknown) {
