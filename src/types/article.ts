@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty } from 'class-validator'
+import { ArticleEntry } from 'src/types'
 
 export type Strings = Record<string, string>
 
@@ -17,3 +18,9 @@ export class CreateArticleBody {
   @IsString()
   content: string
 }
+
+export interface CreateArticleResponse {
+  articleId: number
+}
+
+export interface GetArticlesResponse extends ArticleEntry {}
