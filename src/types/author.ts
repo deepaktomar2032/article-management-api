@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty } from 'class-validator'
 import { AuthorEntry } from './database/AuthorEntry'
 
-export interface Author {
+export type Author = {
   email: string
   password: string
   name: string
@@ -21,7 +21,7 @@ export class CreateAuthorBody implements Author {
   name: string
 }
 
-export interface CreateAuthorResponse {
+export type CreateAuthorResponse = {
   authorId: number
 }
 

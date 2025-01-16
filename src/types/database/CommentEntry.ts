@@ -1,4 +1,4 @@
-export interface CommentEntry {
+export type CommentEntry = {
   id: number
   authorId: number
   articleId: number

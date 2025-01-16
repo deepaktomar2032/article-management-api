@@ -1,4 +1,4 @@
-export interface ArticleEntry {
+export type ArticleEntry = {
   id: number
   title: string
   content: string

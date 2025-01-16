@@ -3,7 +3,7 @@ import { ArticleEntry } from './database/ArticleEntry'
 
 export type Strings = Record<string, string>
 
-export interface Article {
+export type Article = {
   email?: string
   title: string
   content: string
@@ -19,8 +19,8 @@ export class CreateArticleBody {
   content: string
 }
 
-export interface CreateArticleResponse {
+export type CreateArticleResponse = {
   articleId: number
 }
 
-export interface GetArticleResponse extends ArticleEntry {}
+export type GetArticleResponse = ArticleEntry
