@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
-import { SECRET_KEY } from './../../utils'
+import { SECRET_KEY } from 'src/utils'
 
 @Injectable()
 export class AdminGuard implements CanActivate {

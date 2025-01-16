@@ -56,7 +56,7 @@
 
 # Required ENV's
 
--  PORT=4000
+-  PORT=3000
 
 -  DB_HOST=mysql
 -  DB_USER=test
@@ -88,25 +88,25 @@
 
 -  `npm run add-migration <migration-name>`
 
--  It will start the server on port 4000 & api is available to consume
+-  It will start the server on port 3000 & api is available to consume
 
-   -  API Docs - http://localhost:4000/api-docs
+   -  API Docs - http://localhost:3000/api-docs
 
-   -  Health check: GET - http://localhost:4000/api/health
+   -  Health check: GET - http://localhost:3000/api/health
 
-   -  Create Author: POST - http://localhost:4000/api/author
-   -  Login (Authentication): POST - http://localhost:4000/api/auth
-   -  Get All Authors: GET - http://localhost:4000/api/authors
-   -  Get Author By Id: GET - http://localhost:4000/api/author/:id
+   -  Create Author: POST - http://localhost:3000/api/author
+   -  Login (Authentication): POST - http://localhost:3000/api/auth
+   -  Get All Authors: GET - http://localhost:3000/api/authors
+   -  Get Author By Id: GET - http://localhost:3000/api/author/:id
 
-   -  Create Article: POST - http://localhost:4000/api/article
-   -  Get All Articles: GET - http://localhost:4000/api/articles
-   -  Get Article By Id: GET - http://localhost:4000/api/article/:id
-   -  Delete Article By Id: DELETE - http://localhost:4000/api/article/:id
+   -  Create Article: POST - http://localhost:3000/api/article
+   -  Get All Articles: GET - http://localhost:3000/api/articles
+   -  Get Article By Id: GET - http://localhost:3000/api/article/:id
+   -  Delete Article By Id: DELETE - http://localhost:3000/api/article/:id
 
-   -  Create Comment: POST - http://localhost:4000/api/comment
-   -  Get All Comments: GET - http://localhost:4000/api/comments
-   -  Get Comment By Id: GET - http://localhost:4000/api/comment/:id
+   -  Create Comment: POST - http://localhost:3000/api/comment
+   -  Get All Comments: GET - http://localhost:3000/api/comments
+   -  Get Comment By Id: GET - http://localhost:3000/api/comment/:id
 
 -  By default we've 2 entries in database through migration
 

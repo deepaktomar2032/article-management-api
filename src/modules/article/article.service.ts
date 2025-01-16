@@ -1,16 +1,14 @@
 import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
-import { AuthorAdapter } from '../adapters/author.adapter'
-import { ArticleAdapter } from '../adapters/article.adapter'
-import { CommentAdapter } from '../adapters/comment.adapter'
-import { Article } from './../../types/article'
-import { message, CACHE_DEFAULT_TIME } from './../../utils'
+import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
+import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
+import { Article } from 'src/types'
+import { message, CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Injectable()
 export class ArticleService {
   @Inject() private readonly authorAdapter: AuthorAdapter
   @Inject() private readonly articleAdapter: ArticleAdapter
-  @Inject() private readonly commentAdapter: CommentAdapter
   @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
 
   async createArticle(body: Article) {
@@ -88,10 +86,7 @@ export class ArticleService {
       }
 
       // Delete article and its comments
-      await this.articleAdapter.withTransaction(async (trx) => {
-        await this.commentAdapter.deleteEntries({ articleId: id }, trx)
-        await this.articleAdapter.deleteEntries({ id }, trx)
-      })
+      await this.articleAdapter.deleteEntries({ id })
 
       return { successful: true, message: message.Article_Deleted_Successfully }
     } catch (error: unknown) {

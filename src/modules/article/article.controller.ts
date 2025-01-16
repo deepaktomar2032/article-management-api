@@ -10,10 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { AuthenticationGuard } from '../authentication/authentication.guard'
-import { AdminGuard } from '../authentication/admin.guard'
+import { AuthenticationGuard } from 'src/modules/authentication/authentication.guard'
+import { AdminGuard } from 'src/modules/authentication/admin.guard'
 import { ArticleService } from './article.service'
-import { CreateArticleBody } from './../../types/article'
+import { CreateArticleBody } from 'src/types'
 
 @ApiTags('Article')
 @UseGuards(AuthenticationGuard)

@@ -1,6 +1,6 @@
 import type { Knex } from 'knex'
 import * as bcrypt from 'bcrypt'
-import { SALT_VALUE } from './../utils/constants'
+import { SALT_VALUE } from '../utils'
 
 const tableName: string = 'author'
 

@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post, ParseIntPipe, Inject, UseGuards } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { AuthenticationGuard } from '../authentication/authentication.guard'
+import { AuthenticationGuard } from 'src/modules/authentication/authentication.guard'
 import { AuthorService } from './author.service'
-import { CreateAuthorBody } from './../../types'
+import { CreateAuthorBody } from 'src/types'
 
 @ApiTags('Author')
 @Controller('/api')
