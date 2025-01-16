@@ -2,7 +2,7 @@ import { Inject, Injectable, InternalServerErrorException, NotFoundException } f
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
-import { Article, CreateArticleResponse, GetArticlesResponse, Strings } from 'src/types'
+import { Article, CreateArticleResponse, GetArticleResponse, Strings } from 'src/types'
 import { message, CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Injectable()
@@ -34,7 +34,7 @@ export class ArticleService {
     }
   }
 
-  async getArticles(): Promise<GetArticlesResponse[]> {
+  async getArticles(): Promise<GetArticleResponse[]> {
     try {
       const result = await this.articleAdapter.findEntries()
 
@@ -51,7 +51,7 @@ export class ArticleService {
     }
   }
 
-  async getArticleById(id: number): Promise<GetArticlesResponse | string> {
+  async getArticleById(id: number): Promise<GetArticleResponse | string> {
     try {
       const value: string = await this.cacheManager.get(`${id}`)
 
@@ -59,7 +59,7 @@ export class ArticleService {
         return value
       }
 
-      const result: GetArticlesResponse = await this.articleAdapter.findEntry({ id })
+      const result: GetArticleResponse = await this.articleAdapter.findEntry({ id })
 
       if (!result) {
         throw new NotFoundException(message.Article_not_found)

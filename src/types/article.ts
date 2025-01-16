@@ -23,4 +23,4 @@ export interface CreateArticleResponse {
   articleId: number
 }
 
-export interface GetArticlesResponse extends ArticleEntry {}
+export interface GetArticleResponse extends ArticleEntry {}

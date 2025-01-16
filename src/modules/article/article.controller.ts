@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { AuthenticationGuard } from 'src/modules/authentication/authentication.guard'
 import { AdminGuard } from 'src/modules/authentication/admin.guard'
 import { ArticleService } from './article.service'
-import { CreateArticleBody, CreateArticleResponse, GetArticlesResponse, Strings } from 'src/types'
+import { CreateArticleBody, CreateArticleResponse, GetArticleResponse, Strings } from 'src/types'
 
 @ApiTags('Article')
 @UseGuards(AuthenticationGuard)
@@ -29,13 +29,13 @@ export class ArticleController {
 
   // Get all articles
   @Get('/articles')
-  async getArticles(): Promise<GetArticlesResponse[]> {
+  async getArticles(): Promise<GetArticleResponse[]> {
     return this.articleService.getArticles()
   }
 
   // Get article by id
   @Get(`/article/:id`)
-  async getArticle(@Param('id', ParseIntPipe) id: number): Promise<GetArticlesResponse | string> {
+  async getArticle(@Param('id', ParseIntPipe) id: number): Promise<GetArticleResponse | string> {
     return this.articleService.getArticleById(id)
   }
 

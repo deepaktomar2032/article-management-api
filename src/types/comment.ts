@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator'
+import { CommentEntry } from './database/CommentEntry'
 
 export interface Comment {
   authorId: number
@@ -19,3 +20,9 @@ export class CreateCommentBody implements Comment {
   @IsString()
   content: string
 }
+
+export interface CommentResponse {
+  commentId: number
+}
+
+export interface GetCommentResponse extends CommentEntry {}
