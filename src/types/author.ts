@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty } from 'class-validator'
+import { AuthorEntry } from './database/AuthorEntry'
 
 export interface Author {
   email: string
@@ -19,3 +20,9 @@ export class CreateAuthorBody implements Author {
   @IsString()
   name: string
 }
+
+export interface CreateAuthorResponse {
+  authorId: number
+}
+
+export type GetAuthorsResponse = Pick<AuthorEntry, 'id' | 'name' | 'email' | 'isAdmin'>

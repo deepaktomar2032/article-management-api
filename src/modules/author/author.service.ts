@@ -1,21 +1,27 @@
-import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
-import { Author } from 'src/types'
+import { Author, CreateAuthorResponse, GetAuthorsResponse } from 'src/types'
 import { message, SALT_VALUE } from 'src/utils'
 
 @Injectable()
 export class AuthorService {
   @Inject() private readonly authorAdapter: AuthorAdapter
 
-  async createAuthor(body: Author) {
+  async createAuthor(body: Author): Promise<CreateAuthorResponse> {
     try {
       const { name, email, password } = body
 
       const existanceCheck = await this.authorAdapter.findEntry({ email })
 
       if (existanceCheck) {
-        return { successful: true, message: message.Email_already_exists }
+        throw new ConflictException(message.Email_already_exists)
       }
 
       // Hash password & save to database
@@ -24,7 +30,7 @@ export class AuthorService {
 
       const result = await this.authorAdapter.insertEntry(authorData)
 
-      return { successful: true, message: message.Author_Created_Successfully, authorId: result }
+      return { authorId: result.id }
     } catch (error: unknown) {
       console.error('Error inserting data:', error)
       if (error instanceof InternalServerErrorException) {
@@ -34,7 +40,7 @@ export class AuthorService {
     }
   }
 
-  async getAuthors() {
+  async getAuthors(): Promise<GetAuthorsResponse[]> {
     try {
       const result = await this.authorAdapter.findEntries()
 
@@ -47,7 +53,7 @@ export class AuthorService {
         return rest
       })
 
-      return { successful: true, message: message.Authors_Fetched_Successfully, response }
+      return response
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -56,7 +62,7 @@ export class AuthorService {
     }
   }
 
-  async getAuthorById(id: number) {
+  async getAuthorById(id: number): Promise<GetAuthorsResponse> {
     try {
       const result = await this.authorAdapter.findEntry({ id })
       if (!result) {
@@ -64,7 +70,7 @@ export class AuthorService {
       }
       const { password, ...response } = result
 
-      return { successful: true, message: message.Author_Fetched_Successfully, response }
+      return response
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
