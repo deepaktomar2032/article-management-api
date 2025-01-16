@@ -81,7 +81,7 @@ describe('ArticleService', () => {
       const findEntrySpy = jest.spyOn(mockAuthorAdapter, 'findEntry').mockResolvedValue(author)
       const insertEntrySpy = jest
         .spyOn(mockArticleAdapter, 'insertEntry')
-        .mockResolvedValue(articleId)
+        .mockResolvedValue({ id: articleId })
 
       const result = await articleService.createArticle({ email, title, content })
 
@@ -92,11 +92,7 @@ describe('ArticleService', () => {
 
       expect(findEntrySpy).toHaveBeenCalledTimes(1)
       expect(insertEntrySpy).toHaveBeenCalledTimes(1)
-      expect(result).toEqual({
-        successful: true,
-        message: message.Article_Created_Successfully,
-        articleId,
-      })
+      expect(result).toEqual({ articleId })
     })
 
     it('should not create a new article if author not found', async () => {
@@ -121,21 +117,15 @@ describe('ArticleService', () => {
 
   describe('getArticles', () => {
     it('should respond with a list of all articles available in database', async () => {
-      const article = { id, authorId, title, content, createdAt }
+      const articles = [{ id, authorId, title, content, createdAt }]
       const findEntriesSpy = jest
         .spyOn(mockArticleAdapter, 'findEntries')
-        .mockResolvedValue([article])
+        .mockResolvedValue(articles)
 
       const result = await articleService.getArticles()
 
       expect(findEntriesSpy).toHaveBeenCalledTimes(1)
-      expect(result).toEqual(
-        expect.objectContaining({
-          successful: true,
-          message: message.Articles_Fetched_Successfully,
-          result: [expect.objectContaining({ id, authorId, title, content })],
-        }),
-      )
+      expect(result).toEqual(articles)
     })
   })
 
@@ -150,13 +140,7 @@ describe('ArticleService', () => {
       expect(getSpy).toHaveBeenCalledTimes(1)
       expect(getSpy).toHaveBeenCalledWith('1')
 
-      expect(result).toEqual(
-        expect.objectContaining({
-          successful: true,
-          message: message.Fetched_From_Cache,
-          result: expect.objectContaining({ id, authorId, title, content }),
-        }),
-      )
+      expect(result).toEqual(article)
       expect(findEntrySpy).toHaveBeenCalledTimes(0)
     })
 
@@ -181,13 +165,7 @@ describe('ArticleService', () => {
 
       expect(getSpy).toHaveBeenCalledTimes(1)
 
-      expect(result).toEqual(
-        expect.objectContaining({
-          successful: true,
-          message: message.Article_Fetched_Successfully,
-          result: expect.objectContaining({ id, authorId, title, content }),
-        }),
-      )
+      expect(result).toEqual(article)
       expect(findEntrySpy).toHaveBeenCalledTimes(1)
     })
   })

@@ -2,7 +2,7 @@ import { Inject, Injectable, InternalServerErrorException, NotFoundException } f
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
 import { CommentAdapter } from 'src/modules/adapters/comment.adapter'
-import { Comment } from 'src/types'
+import { Comment, CommentResponse, GetCommentResponse } from 'src/types'
 import { message } from 'src/utils'
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CommentService {
   @Inject() private readonly articleAdapter: ArticleAdapter
   @Inject() private readonly commentAdapter: CommentAdapter
 
-  async createComment(body: Comment) {
+  async createComment(body: Comment): Promise<CommentResponse> {
     try {
       const { authorId, articleId, content } = body
 
@@ -28,9 +28,9 @@ export class CommentService {
       }
 
       const commentData = { authorId, articleId, content, createdAt: new Date() }
-      await this.commentAdapter.insertEntry(commentData)
+      const result = await this.commentAdapter.insertEntry(commentData)
 
-      return { successful: true, message: message.Inserted_Successfully }
+      return { commentId: result.id }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -39,7 +39,7 @@ export class CommentService {
     }
   }
 
-  async getComments() {
+  async getComments(): Promise<GetCommentResponse[]> {
     try {
       const result = await this.commentAdapter.findEntries()
 
@@ -47,7 +47,7 @@ export class CommentService {
         throw new NotFoundException(message.No_Comments_Found)
       }
 
-      return { successful: true, message: message.Comments_Fetched_Successfully, result }
+      return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -56,14 +56,14 @@ export class CommentService {
     }
   }
 
-  async getCommentById(id: number) {
+  async getCommentById(id: number): Promise<GetCommentResponse> {
     try {
       const result = await this.commentAdapter.findEntry({ id })
       if (!result) {
         throw new NotFoundException(message.Comment_not_found)
       }
 
-      return { successful: true, message: message.Comment_Fetched_Successfully, result }
+      return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)

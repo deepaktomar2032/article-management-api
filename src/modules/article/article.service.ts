@@ -2,7 +2,7 @@ import { Inject, Injectable, InternalServerErrorException, NotFoundException } f
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
-import { Article } from 'src/types'
+import { Article, CreateArticleResponse, GetArticleResponse, Strings } from 'src/types'
 import { message, CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ArticleService {
   @Inject() private readonly articleAdapter: ArticleAdapter
   @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
 
-  async createArticle(body: Article) {
+  async createArticle(body: Article): Promise<CreateArticleResponse> {
     try {
       const { email, title, content } = body
 
@@ -22,11 +22,10 @@ export class ArticleService {
       }
 
       // Insert new article into the database
-      const authorId = author.id
-      const article = { authorId, title, content, createdAt: new Date() }
-      const result = await this.articleAdapter.insertEntry(article)
+      const article = { title, content, authorId: author.id, createdAt: new Date() }
 
-      return { successful: true, message: message.Article_Created_Successfully, articleId: result }
+      const result = await this.articleAdapter.insertEntry(article)
+      return { articleId: result.id }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -35,7 +34,7 @@ export class ArticleService {
     }
   }
 
-  async getArticles() {
+  async getArticles(): Promise<GetArticleResponse[]> {
     try {
       const result = await this.articleAdapter.findEntries()
 
@@ -43,7 +42,7 @@ export class ArticleService {
         throw new NotFoundException(message.No_Articles_Found)
       }
 
-      return { successful: true, message: message.Articles_Fetched_Successfully, result }
+      return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -52,23 +51,24 @@ export class ArticleService {
     }
   }
 
-  async getArticleById(id: number) {
+  async getArticleById(id: number): Promise<GetArticleResponse | string> {
     try {
       const value: string = await this.cacheManager.get(`${id}`)
 
       if (value) {
-        return { successful: true, message: message.Fetched_From_Cache, result: value }
+        return value
       }
 
-      const result = await this.articleAdapter.findEntry({ id })
+      const result: GetArticleResponse = await this.articleAdapter.findEntry({ id })
 
       if (!result) {
         throw new NotFoundException(message.Article_not_found)
       }
 
+      // Cache the result
       await this.cacheManager.set(`${id}`, result, CACHE_DEFAULT_TIME)
 
-      return { successful: true, message: message.Article_Fetched_Successfully, result }
+      return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -77,7 +77,7 @@ export class ArticleService {
     }
   }
 
-  async deleteArticleById(id: number) {
+  async deleteArticleById(id: number): Promise<Strings> {
     try {
       const article = await this.articleAdapter.findEntry({ id })
 
@@ -88,7 +88,7 @@ export class ArticleService {
       // Delete article and its comments
       await this.articleAdapter.deleteEntries({ id })
 
-      return { successful: true, message: message.Article_Deleted_Successfully }
+      return { message: message.Article_Deleted_Successfully }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)

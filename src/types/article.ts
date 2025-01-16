@@ -1,8 +1,9 @@
 import { IsString, IsNotEmpty } from 'class-validator'
+import { ArticleEntry } from './database/ArticleEntry'
 
 export type Strings = Record<string, string>
 
-export interface Article {
+export type Article = {
   email?: string
   title: string
   content: string
@@ -17,3 +18,9 @@ export class CreateArticleBody {
   @IsString()
   content: string
 }
+
+export type CreateArticleResponse = {
+  articleId: number
+}
+
+export type GetArticleResponse = ArticleEntry
