@@ -30,7 +30,7 @@ export class DatabaseService<T> {
     return entries?.[0]
   }
 
-  async insertEntry(values: Partial<T>, trx?: Knex.Transaction): Promise<T> {
+  async insertEntry(values: Partial<T>, trx?: Knex.Transaction): Promise<number> {
     const result: Array<T> = (await this.withClient(trx)
       .table(this.tableName)
       .insert(convertKeysToUnderscore(values))) as Array<T>

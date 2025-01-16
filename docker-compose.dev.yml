@@ -20,7 +20,7 @@ services:
       SECRET_KEY: secret
       EXPIRATION_TIME: 25m
 
-      DATABASE_URL_DEV: mysql://user:pass@mysql:3306/test_db
+      DATABASE_URL: mysql://user:pass@mysql:3306/test_db
 
     depends_on:
       - mysql

@@ -4,7 +4,8 @@ import { ArticleEntry } from './database/ArticleEntry'
 export type Strings = Record<string, string>
 
 export type Article = {
-  email?: string
+  authorId: number
+  email: string
   title: string
   content: string
 }

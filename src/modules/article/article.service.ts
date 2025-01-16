@@ -1,19 +1,24 @@
 import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import { Request } from 'express'
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
-import { Article, CreateArticleResponse, GetArticleResponse, Strings } from 'src/types'
+import { FavoriteAdapter } from 'src/modules/adapters/favorite.adapter'
+import { CreateArticleBody, CreateArticleResponse, GetArticleResponse, Strings } from 'src/types'
 import { message, CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Injectable()
 export class ArticleService {
   @Inject() private readonly authorAdapter: AuthorAdapter
   @Inject() private readonly articleAdapter: ArticleAdapter
+  @Inject() private readonly favoriteAdapter: FavoriteAdapter
   @Inject(CACHE_MANAGER) private readonly cacheManager: Cache
 
-  async createArticle(body: Article): Promise<CreateArticleResponse> {
+  async createArticle(request: Request, body: CreateArticleBody): Promise<CreateArticleResponse> {
     try {
-      const { email, title, content } = body
+      const { title, content } = body
+
+      const { authorId, email } = request['user']
 
       // Check if the author exists
       const author = await this.authorAdapter.findEntry({ email })
@@ -22,10 +27,10 @@ export class ArticleService {
       }
 
       // Insert new article into the database
-      const article = { title, content, authorId: author.id, createdAt: new Date() }
+      const article = { title, content, authorId, createdAt: new Date() }
 
-      const result = await this.articleAdapter.insertEntry(article)
-      return { articleId: result.id }
+      const articleId = await this.articleAdapter.insertEntry(article)
+      return { articleId }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -77,6 +82,34 @@ export class ArticleService {
     }
   }
 
+  async toggleFavorite(request: Request, id: number): Promise<Strings> {
+    try {
+      const { authorId } = request['user']
+
+      console.log('authorId', authorId)
+      console.log('id', id)
+
+      const existingFavorite = await this.favoriteAdapter.findEntry({ authorId, articleId: id })
+
+      console.log('existingFavorite', existingFavorite)
+
+      if (existingFavorite) {
+        await this.favoriteAdapter.deleteEntries({ authorId, articleId: id })
+        return { message: message.favorite_Removed }
+      }
+
+      const article = await this.favoriteAdapter.insertEntry({ authorId, articleId: id })
+
+      return { message: message.Article_Marked_As_Favorite }
+    } catch (error: unknown) {
+      if (error instanceof InternalServerErrorException) {
+        throw new InternalServerErrorException(message.Something_went_wrong)
+      }
+      throw error
+    }
+  }
+
+  // ADMIN ONLY
   async deleteArticleById(id: number): Promise<Strings> {
     try {
       const article = await this.articleAdapter.findEntry({ id })

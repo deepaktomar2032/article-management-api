@@ -3,9 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { ArticleService } from './article.service'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
-import { CommentAdapter } from 'src/modules/adapters/comment.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
-import { message } from 'src/utils'
+import { CommentAdapter } from 'src/modules/adapters/comment.adapter'
+import { FavoriteAdapter } from 'src/modules/adapters/favorite.adapter'
 
 const mockCacheManager = {
   set: jest.fn(),
@@ -26,6 +26,11 @@ const mockArticleAdapter = {
 }
 
 const mockCommentAdapter = {
+  deleteEntries: jest.fn(),
+}
+
+const mockFavoriteAdapter = {
+  findEntry: jest.fn(),
   deleteEntries: jest.fn(),
 }
 
@@ -61,6 +66,10 @@ describe('ArticleService', () => {
           useValue: mockCommentAdapter,
         },
         {
+          provide: FavoriteAdapter,
+          useValue: mockFavoriteAdapter,
+        },
+        {
           provide: CACHE_MANAGER,
           useValue: mockCacheManager,
         },
@@ -78,17 +87,22 @@ describe('ArticleService', () => {
     it('should create a new article if author exists', async () => {
       const author = { id, name, email, password, isAdmin }
 
+      const mockRequest = { user: { email, authorId } }
+
       const findEntrySpy = jest.spyOn(mockAuthorAdapter, 'findEntry').mockResolvedValue(author)
       const insertEntrySpy = jest
         .spyOn(mockArticleAdapter, 'insertEntry')
-        .mockResolvedValue({ id: articleId })
+        .mockResolvedValue(articleId)
 
-      const result = await articleService.createArticle({ email, title, content })
+      const result = await articleService.createArticle(mockRequest as any, { title, content })
 
       expect(mockAuthorAdapter.findEntry).toHaveBeenCalledWith({ email })
-      expect(mockArticleAdapter.insertEntry).toHaveBeenCalledWith(
-        expect.objectContaining({ authorId, title, content }),
-      )
+      expect(mockArticleAdapter.insertEntry).toHaveBeenCalledWith({
+        title,
+        content,
+        authorId,
+        createdAt: expect.any(Date),
+      })
 
       expect(findEntrySpy).toHaveBeenCalledTimes(1)
       expect(insertEntrySpy).toHaveBeenCalledTimes(1)
@@ -97,15 +111,16 @@ describe('ArticleService', () => {
 
     it('should not create a new article if author not found', async () => {
       const article = { id, authorId, title, content, createdAt }
+      const mockRequest = { user: { email, authorId } }
 
       const findEntrySpy = jest.spyOn(mockAuthorAdapter, 'findEntry').mockResolvedValue(undefined)
       const insertEntrySpy = jest
         .spyOn(mockArticleAdapter, 'insertEntry')
         .mockResolvedValue(article)
 
-      await expect(articleService.createArticle({ email, title, content })).rejects.toThrow(
-        NotFoundException,
-      )
+      await expect(
+        articleService.createArticle(mockRequest as any, { title, content }),
+      ).rejects.toThrow(NotFoundException)
 
       expect(mockAuthorAdapter.findEntry).toHaveBeenCalledWith({ email })
       expect(mockArticleAdapter.insertEntry).not.toHaveBeenCalled()

@@ -1,6 +1,7 @@
 export * from './database/TableName'
 export * from './database/ArticleEntry'
 export * from './database/AuthorEntry'
+export * from './database/FavoriteEntry'
 export * from './database/CommentEntry'
 export * from './database/IStringifiable'
 export * from './author'
