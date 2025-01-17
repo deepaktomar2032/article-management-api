@@ -22,6 +22,7 @@
 -  Create an article
 -  Get a list of all articles
 -  Get a specific article by ID
+-  Mark/Unmark favorite article by ID
 -  Delete an article by ID (ADMIN ONLY)
 
 -  Create a comment
@@ -30,7 +31,7 @@
 
 # Tables:
 
-## authors
+## author
 
     - id (Primary Key, Auto Increment)
     - name (String)
@@ -38,34 +39,38 @@
     - password (String)
     - is_admin (Boolean, Default: false)
 
-## articles
+## article
 
     - id (Primary Key, Auto Increment)
-    - author_id (Foreign Key -> authors.id)
+    - author_id (Foreign Key -> author.id)
     - title (String)
     - content (String)
     - created_at (Date)
 
-## comments
+## comment
 
     - id (Primary Key, Auto Increment)
-    - article_id (Foreign Key -> articles.id)
-    - author_id (Foreign Key -> authors.id)
+    - author_id (Foreign Key -> author.id)
+    - article_id (Foreign Key -> article.id)
     - content (String)
     - created_at (Date)
+
+## favorite
+
+    - id (Primary Key, Auto Increment)
+    - author_id (Foreign Key -> author.id)
+    - article_id (Foreign Key -> article.id)
 
 # Required ENV's
 
 -  PORT=3000
 
--  DB_HOST=mysql
--  DB_USER=test
--  DB_PASSWORD=password
--  DB_NAME=test_db
--  DB_PORT=3306
+-  SALT_VALUE=10
+-  CACHE_DEFAULT_TIME: 600000 // 10 minutes
+-  SECRET_KEY: secret
+-  EXPIRATION_TIME: 25m
 
--  SECRET_KEY=secret
--  EXPIRATION_TIME=25m
+-  DATABASE_URL: mysql://user:pass@mysql:3306/test_db
 
 # Run Project using Docker
 
@@ -102,6 +107,7 @@
    -  Create Article: POST - http://localhost:3000/api/article
    -  Get All Articles: GET - http://localhost:3000/api/articles
    -  Get Article By Id: GET - http://localhost:3000/api/article/:id
+   -  Mark/Unmark favorite Article by Id: POST - http://localhost:3000/api/article/:id/favorite
    -  Delete Article By Id: DELETE - http://localhost:3000/api/article/:id
 
    -  Create Comment: POST - http://localhost:3000/api/comment
@@ -124,6 +130,7 @@ password: pass1
 
 -  healthCheck - GET - /api/health
    No body required
+
 
 -  createAuthor - POST - /api/author
 
@@ -154,6 +161,7 @@ password: pass1
    `Authorization: Bearer <accessToken>` required in headers
    No body required
 
+
 -  createArticle - POST - /api/article
    `Authorization: Bearer <accessToken>` required in headers
 
@@ -172,10 +180,15 @@ password: pass1
    `Authorization: Bearer <accessToken>` required in headers
    No body required
 
+-  markArticleAsFavorite - POST - /api/article/:id/favorite
+   `Authorization: Bearer <accessToken>` required in headers
+   No body required
+
 -  deleteArticleById - DELETE - /api/article/:id
    `Authorization: Bearer <accessToken>` required in headers
    No body required
 -  Note - Only available for admin users
+
 
 -  createComment - POST - /api/comment
    No Authenticaion required
@@ -206,14 +219,13 @@ password: pass1
       -  comment/ - comment module
       -  authentication/ - authentication module
       -  database/ - database module
-      -  adapters/ - adapters for author, article, comment
+      -  adapters/ - adapters for author, article, comment, mark/unmark favorite
 
    -  types/ - has all types/interfaces used through out the project
    -  utils/ - has common functionality used through out the project (messages, enums, error handler etc..)
-   -  test/ - has test configuration
    -  migrations/ - has all migration files
 
 -  knexfile.ts - knex configuration file
 -  Dockerfile - docker file
 -  docker-compose.dev.yml - yml file with all configurations for development
--  docker-compose.yml - yml file with all configurations for production
+-  docker-compose.prod.yml - yml file with all configurations for production
