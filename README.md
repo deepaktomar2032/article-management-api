@@ -100,7 +100,7 @@
    -  Health check: GET - http://localhost:3000/api/health
 
    -  Create Author: POST - http://localhost:3000/api/author
-   -  Login (Authentication): POST - http://localhost:3000/api/auth
+   -  Login (Authentication): POST - http://localhost:3000/api/login
    -  Get All Authors: GET - http://localhost:3000/api/authors
    -  Get Author By Id: GET - http://localhost:3000/api/author/:id
 
@@ -142,7 +142,7 @@ password: pass1
 }
 ```
 
--  login - POST - /api/auth
+-  login - POST - /api/login
 
 ```sh
 {
