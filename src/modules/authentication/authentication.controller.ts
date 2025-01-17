@@ -9,7 +9,7 @@ export class AuthenticationController {
   @Inject() private readonly authenticationService: AuthenticationService
 
   @HttpCode(HttpStatus.OK)
-  @Post('/auth')
+  @Post('/login')
   signIn(@Body() signInData: AuthBody): Promise<Strings> {
     return this.authenticationService.signIn(signInData.email, signInData.password)
   }
