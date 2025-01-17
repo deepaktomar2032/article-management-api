@@ -2,13 +2,14 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
+import { Strings } from 'src/types'
 
 @Injectable()
 export class AuthenticationService {
   @Inject() private readonly authorAdapter: AuthorAdapter
   @Inject() private readonly jwtService: JwtService
 
-  async signIn(email: string, password: string): Promise<{ access_token: string }> {
+  async signIn(email: string, password: string): Promise<Strings> {
     const author = await this.authorAdapter.findEntry({ email })
 
     if (!author) {
