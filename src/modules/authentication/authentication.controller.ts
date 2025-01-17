@@ -11,6 +11,6 @@ export class AuthenticationController {
   @HttpCode(HttpStatus.OK)
   @Post('/login')
   signIn(@Body() signInData: AuthBody): Promise<Strings> {
-    return this.authenticationService.signIn(signInData.email, signInData.password)
+    return this.authenticationService.signIn(signInData)
   }
 }
