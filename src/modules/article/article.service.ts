@@ -40,7 +40,7 @@ export class ArticleService {
       return { articleId }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -65,7 +65,7 @@ export class ArticleService {
       return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -97,7 +97,7 @@ export class ArticleService {
       return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -126,7 +126,7 @@ export class ArticleService {
       return { message: message.Article_Marked_As_Favorite }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -147,7 +147,7 @@ export class ArticleService {
       return { message: message.Article_Deleted_Successfully }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }

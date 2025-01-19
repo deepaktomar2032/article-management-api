@@ -10,5 +10,5 @@ export const message = {
   No_Comments_Found: 'No Comments Found',
   Article_Marked_As_Favorite: 'Article Marked As Favorite',
   favorite_Removed: 'Favorite Removed',
-  Something_went_wrong: 'Something Went Wrong',
+  Internal_Server_Error: 'Internal Server Error',
 }
