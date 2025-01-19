@@ -191,7 +191,6 @@ password: pass1
 
 
 -  createComment - POST - /api/comment
-   No Authenticaion required
 
 ```sh
 {
@@ -201,11 +200,9 @@ password: pass1
 ```
 
 -  getCommentById - GET - /api/comment/:id
-   No Authenticaion required
    No body required
 
 -  getComments - GET - /api/comments
-   No Authenticaion required
    No body required
 
 # Project Structure
