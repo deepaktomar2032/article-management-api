@@ -46,6 +46,7 @@ const title = 'test'
 const content = 'test'
 const authorId = 1
 const createdAt = new Date()
+const favorite = false
 
 describe('ArticleService', () => {
   let articleService: ArticleService
@@ -184,7 +185,7 @@ describe('ArticleService', () => {
 
     it('should responds with OK if requested article is not found in cache but found in database', async () => {
       const mockRequest = { user: { authorId } }
-      const article = { id, authorId, title, content, createdAt }
+      const article = { id, authorId, title, content, createdAt, favorite }
 
       const getSpy = jest.spyOn(mockCacheManager, 'get').mockResolvedValue(undefined)
       const findEntrySpy = jest.spyOn(mockArticleAdapter, 'findEntry').mockResolvedValue(article)
