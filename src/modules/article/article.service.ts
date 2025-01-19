@@ -4,7 +4,14 @@ import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
 import { FavoriteAdapter } from 'src/modules/adapters/favorite.adapter'
-import { CreateArticleBody, CreateArticleResponse, GetArticleResponse, Strings } from 'src/types'
+import {
+  ArticleEntry,
+  FavoriteEntry,
+  CreateArticleBody,
+  CreateArticleResponse,
+  GetArticleResponse,
+  Strings,
+} from 'src/types'
 import { message, CACHE_DEFAULT_TIME } from 'src/utils'
 
 @Injectable()
@@ -41,11 +48,18 @@ export class ArticleService {
 
   async getArticles(): Promise<GetArticleResponse[]> {
     try {
-      const result = await this.articleAdapter.findEntries()
+      const articles: ArticleEntry[] = await this.articleAdapter.findEntries()
 
-      if (!result) {
+      if (!articles) {
         throw new NotFoundException(message.No_Articles_Found)
       }
+
+      const existingFavorite: FavoriteEntry[] = await this.favoriteAdapter.findEntries()
+
+      const result: GetArticleResponse[] = articles.map((article) => ({
+        ...article,
+        favorite: existingFavorite.some((entry) => entry.articleId === article.id),
+      }))
 
       return result
     } catch (error: unknown) {
@@ -64,16 +78,23 @@ export class ArticleService {
         return value
       }
 
-      const result: GetArticleResponse = await this.articleAdapter.findEntry({ id })
+      const article: GetArticleResponse = await this.articleAdapter.findEntry({ id })
 
-      if (!result) {
+      if (!article) {
         throw new NotFoundException(message.Article_not_found)
       }
 
-      // Cache the result
-      await this.cacheManager.set(`${id}`, result, CACHE_DEFAULT_TIME)
+      const existingFavorite: FavoriteEntry = await this.favoriteAdapter.findEntry({
+        articleId: id,
+      })
 
-      return result
+      if (existingFavorite) article.favorite = true
+      else article.favorite = false
+
+      // Cache the article
+      await this.cacheManager.set(`${id}`, article, CACHE_DEFAULT_TIME)
+
+      return article
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)

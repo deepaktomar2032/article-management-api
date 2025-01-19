@@ -31,6 +31,7 @@ const mockCommentAdapter = {
 
 const mockFavoriteAdapter = {
   findEntry: jest.fn(),
+  findEntries: jest.fn(),
   deleteEntries: jest.fn(),
 }
 
@@ -133,14 +134,20 @@ describe('ArticleService', () => {
   describe('getArticles', () => {
     it('should respond with a list of all articles available in database', async () => {
       const articles = [{ id, authorId, title, content, createdAt }]
-      const findEntriesSpy = jest
+      const favorites = [{ id, authorId, articleId }]
+      const expectedResult = [{ id, authorId, title, content, createdAt, favorite: true }]
+      const articleFindEntriesSpy = jest
         .spyOn(mockArticleAdapter, 'findEntries')
         .mockResolvedValue(articles)
 
+      const favoriteFindEntriesSpy = jest
+        .spyOn(mockFavoriteAdapter, 'findEntries')
+        .mockResolvedValue(favorites)
+
       const result = await articleService.getArticles()
 
-      expect(findEntriesSpy).toHaveBeenCalledTimes(1)
-      expect(result).toEqual(articles)
+      expect(articleFindEntriesSpy).toHaveBeenCalledTimes(1)
+      expect(result).toEqual(expectedResult)
     })
   })
 
