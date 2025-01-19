@@ -15,7 +15,7 @@
 # The idea of this project is to create a RESTful API for managing articles. The API should be able to:
 
 -  Login (Authentication)
--  Create an author
+-  Signup (Create an author)
 -  Get a list of all authors
 -  Get a specific author by ID
 
@@ -107,7 +107,7 @@
    -  Create Article: POST - http://localhost:3000/api/article
    -  Get All Articles: GET - http://localhost:3000/api/articles
    -  Get Article By Id: GET - http://localhost:3000/api/article/:id
-   -  Mark/Unmark favorite Article by Id: POST - http://localhost:3000/api/article/:id/favorite
+   -  Mark/Unmark favorite Article by Id: PUT - http://localhost:3000/api/article/:id/favorite
    -  Delete Article By Id: DELETE - http://localhost:3000/api/article/:id
 
    -  Create Comment: POST - http://localhost:3000/api/comment
@@ -180,7 +180,7 @@ password: pass1
    `Authorization: Bearer <accessToken>` required in headers
    No body required
 
--  markArticleAsFavorite - POST - /api/article/:id/favorite
+-  markArticleAsFavorite - PUT - /api/article/:id/favorite
    `Authorization: Bearer <accessToken>` required in headers
    No body required
 
