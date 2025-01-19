@@ -36,7 +36,7 @@ export class CommentService {
       return { commentId }
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -53,7 +53,7 @@ export class CommentService {
       return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -69,7 +69,7 @@ export class CommentService {
       return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }

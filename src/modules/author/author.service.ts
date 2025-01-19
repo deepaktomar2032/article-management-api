@@ -34,7 +34,7 @@ export class AuthorService {
     } catch (error: unknown) {
       console.error('Error inserting data:', error)
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -56,7 +56,7 @@ export class AuthorService {
       return response
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
@@ -73,7 +73,7 @@ export class AuthorService {
       return response
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(message.Something_went_wrong)
+        throw new InternalServerErrorException(message.Internal_Server_Error)
       }
       throw error
     }
