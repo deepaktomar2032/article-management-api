@@ -7,11 +7,7 @@ export type Comment = {
   content: string
 }
 
-export class CreateCommentBody implements Comment {
-  @IsNotEmpty()
-  @IsNumber()
-  authorId: number
-
+export class CreateCommentBody {
   @IsNotEmpty()
   @IsNumber()
   articleId: number
