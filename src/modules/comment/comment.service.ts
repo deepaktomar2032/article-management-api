@@ -1,8 +1,9 @@
 import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import { Request } from 'express'
 import { AuthorAdapter } from 'src/modules/adapters/author.adapter'
 import { ArticleAdapter } from 'src/modules/adapters/article.adapter'
 import { CommentAdapter } from 'src/modules/adapters/comment.adapter'
-import { Comment, CommentResponse, GetCommentResponse } from 'src/types'
+import { CommentResponse, CreateCommentBody, GetCommentResponse } from 'src/types'
 import { message } from 'src/utils'
 
 @Injectable()
@@ -11,9 +12,11 @@ export class CommentService {
   @Inject() private readonly articleAdapter: ArticleAdapter
   @Inject() private readonly commentAdapter: CommentAdapter
 
-  async createComment(body: Comment): Promise<CommentResponse> {
+  async createComment(request: Request, body: CreateCommentBody): Promise<CommentResponse> {
     try {
-      const { authorId, articleId, content } = body
+      const { articleId, content } = body
+
+      const { authorId } = request['user']
 
       // Check if the author exists
       const author = await this.authorAdapter.findEntry({ id: authorId })

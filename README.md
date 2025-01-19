@@ -195,7 +195,6 @@ password: pass1
 
 ```sh
 {
-   "authorId": "number",
    "articleId": "number",
    "content": "string"
 }
