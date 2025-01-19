@@ -46,7 +46,7 @@ export class ArticleService {
     }
   }
 
-  async getArticles(): Promise<GetArticleResponse[]> {
+  async getArticles(request: Request): Promise<GetArticleResponse[]> {
     try {
       const articles: ArticleEntry[] = await this.articleAdapter.findEntries()
 
@@ -54,7 +54,8 @@ export class ArticleService {
         throw new NotFoundException(message.No_Articles_Found)
       }
 
-      const existingFavorite: FavoriteEntry[] = await this.favoriteAdapter.findEntries()
+      const { authorId } = request['user']
+      const existingFavorite: FavoriteEntry[] = await this.favoriteAdapter.findEntries({ authorId })
 
       const result: GetArticleResponse[] = articles.map((article) => ({
         ...article,
@@ -70,7 +71,7 @@ export class ArticleService {
     }
   }
 
-  async getArticleById(id: number): Promise<GetArticleResponse | string> {
+  async getArticleById(request: Request, id: number): Promise<GetArticleResponse | string> {
     try {
       const value: string = await this.cacheManager.get(`${id}`)
 
@@ -84,7 +85,9 @@ export class ArticleService {
         throw new NotFoundException(message.Article_not_found)
       }
 
+      const { authorId } = request['user']
       const existingFavorite: FavoriteEntry = await this.favoriteAdapter.findEntry({
+        authorId,
         articleId: id,
       })
 

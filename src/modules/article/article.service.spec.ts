@@ -134,6 +134,7 @@ describe('ArticleService', () => {
   describe('getArticles', () => {
     it('should respond with a list of all articles available in database', async () => {
       const articles = [{ id, authorId, title, content, createdAt }]
+      const mockRequest = { user: { authorId } }
       const favorites = [{ id, authorId, articleId }]
       const expectedResult = [{ id, authorId, title, content, createdAt, favorite: true }]
       const articleFindEntriesSpy = jest
@@ -144,7 +145,7 @@ describe('ArticleService', () => {
         .spyOn(mockFavoriteAdapter, 'findEntries')
         .mockResolvedValue(favorites)
 
-      const result = await articleService.getArticles()
+      const result = await articleService.getArticles(mockRequest as any)
 
       expect(articleFindEntriesSpy).toHaveBeenCalledTimes(1)
       expect(result).toEqual(expectedResult)
@@ -153,11 +154,12 @@ describe('ArticleService', () => {
 
   describe('getArticleById Function', () => {
     it('should respond with cached data if requested article is inside cache', async () => {
+      const mockRequest = { user: { authorId } }
       const article = { id, authorId, title, content, createdAt }
       const getSpy = jest.spyOn(mockCacheManager, 'get').mockResolvedValue(article)
       const findEntrySpy = jest.spyOn(mockArticleAdapter, 'findEntry').mockResolvedValue(article)
 
-      const result = await articleService.getArticleById(1)
+      const result = await articleService.getArticleById(mockRequest as any, 1)
 
       expect(getSpy).toHaveBeenCalledTimes(1)
       expect(getSpy).toHaveBeenCalledWith('1')
@@ -167,10 +169,13 @@ describe('ArticleService', () => {
     })
 
     it('should respond with NOT FOUND if requested article does not exist neither in cache nor in database', async () => {
+      const mockRequest = { user: { authorId } }
       const getSpy = jest.spyOn(mockCacheManager, 'get').mockResolvedValue(undefined)
       const findEntrySpy = jest.spyOn(mockArticleAdapter, 'findEntry').mockResolvedValue(undefined)
 
-      await expect(articleService.getArticleById(1)).rejects.toThrow(NotFoundException)
+      await expect(articleService.getArticleById(mockRequest as any, 1)).rejects.toThrow(
+        NotFoundException,
+      )
 
       expect(getSpy).toHaveBeenCalledTimes(1)
 
@@ -178,12 +183,13 @@ describe('ArticleService', () => {
     })
 
     it('should responds with OK if requested article is not found in cache but found in database', async () => {
+      const mockRequest = { user: { authorId } }
       const article = { id, authorId, title, content, createdAt }
 
       const getSpy = jest.spyOn(mockCacheManager, 'get').mockResolvedValue(undefined)
       const findEntrySpy = jest.spyOn(mockArticleAdapter, 'findEntry').mockResolvedValue(article)
 
-      const result = await articleService.getArticleById(1)
+      const result = await articleService.getArticleById(mockRequest as any, 1)
 
       expect(getSpy).toHaveBeenCalledTimes(1)
 
