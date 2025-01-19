@@ -73,13 +73,11 @@ export class ArticleService {
 
   async getArticleById(request: Request, id: number): Promise<GetArticleResponse | string> {
     try {
-      const value: string = await this.cacheManager.get(`${id}`)
+      const cachedResult: string = await this.cacheManager.get(`${id}`)
 
-      if (value) {
-        return value
-      }
+      if (cachedResult) return cachedResult
 
-      const article: GetArticleResponse = await this.articleAdapter.findEntry({ id })
+      const article: ArticleEntry = await this.articleAdapter.findEntry({ id })
 
       if (!article) {
         throw new NotFoundException(message.Article_not_found)
@@ -91,13 +89,12 @@ export class ArticleService {
         articleId: id,
       })
 
-      if (existingFavorite) article.favorite = true
-      else article.favorite = false
+      const result: GetArticleResponse = { ...article, favorite: existingFavorite ? true : false }
 
       // Cache the article
-      await this.cacheManager.set(`${id}`, article, CACHE_DEFAULT_TIME)
+      await this.cacheManager.set(`${id}`, result, CACHE_DEFAULT_TIME)
 
-      return article
+      return result
     } catch (error: unknown) {
       if (error instanceof InternalServerErrorException) {
         throw new InternalServerErrorException(message.Something_went_wrong)
@@ -120,6 +117,7 @@ export class ArticleService {
 
       if (existingFavorite) {
         await this.favoriteAdapter.deleteEntries({ authorId, articleId: id })
+        await this.cacheManager.del(`${id}`)
         return { message: message.favorite_Removed }
       }
 

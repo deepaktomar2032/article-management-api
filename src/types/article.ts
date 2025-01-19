@@ -22,4 +22,4 @@ export type CreateArticleResponse = {
   articleId: number
 }
 
-export type GetArticleResponse = ArticleEntry
+export type GetArticleResponse = ArticleEntry & { favorite: boolean }
