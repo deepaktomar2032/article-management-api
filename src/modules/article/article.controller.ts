@@ -3,6 +3,7 @@ import {
   Req,
   Controller,
   Post,
+  Put,
   Delete,
   Body,
   ParseIntPipe,
@@ -48,7 +49,7 @@ export class ArticleController {
 
   // Mark/Unmark article as favorite
   @HttpCode(HttpStatus.OK)
-  @Post(`/article/:id/favorite`)
+  @Put(`/article/:id/favorite`)
   async markArticleAsFavorite(
     @Req() request: Request,
     @Param('id', ParseIntPipe) id: number,
