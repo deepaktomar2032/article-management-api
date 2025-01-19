@@ -37,14 +37,17 @@ export class ArticleController {
 
   // Get all articles
   @Get('/articles')
-  async getArticles(): Promise<GetArticleResponse[]> {
-    return this.articleService.getArticles()
+  async getArticles(@Req() request: Request): Promise<GetArticleResponse[]> {
+    return this.articleService.getArticles(request)
   }
 
   // Get article by id
   @Get(`/article/:id`)
-  async getArticle(@Param('id', ParseIntPipe) id: number): Promise<GetArticleResponse | string> {
-    return this.articleService.getArticleById(id)
+  async getArticle(
+    @Req() request: Request,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<GetArticleResponse | string> {
+    return this.articleService.getArticleById(request, id)
   }
 
   // Mark/Unmark article as favorite
