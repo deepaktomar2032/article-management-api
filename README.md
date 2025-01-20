@@ -1,5 +1,7 @@
 # article-management-api
 
+# The idea of this project is to create a RESTful API for managing articles.
+
 ## Tech Stack:
 
 -  Backend: Node.js using TypeScript
@@ -12,7 +14,7 @@
 -  Documentation: Swagger
 -  Testing: Jest
 
-# The idea of this project is to create a RESTful API for managing articles. The API should be able to:
+# Features
 
 -  Login (Authentication)
 -  Signup (Create an author)
